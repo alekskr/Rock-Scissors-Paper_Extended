@@ -23,7 +23,6 @@ f = open('1.txt')
 for line in f:
     table = line.split()
     name_score[table[0]] = int(table[1])
-print(name_score)
 points = 0
 while True:
     option = random.choice(options)
