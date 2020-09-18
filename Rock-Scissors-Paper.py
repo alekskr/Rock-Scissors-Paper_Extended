@@ -16,9 +16,21 @@ def rating():
         return points
 
 
-options = ('rock', 'scissors', 'paper')
+options_default = ('rock', 'scissors', 'paper')
+options_extended = ('rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge', 'paper', 'air', 'water',
+                    'dragon', 'devil', 'lightning', 'gun')
+# если индекс юзера последний, а индекс компа первый, то юзер победил. Если индекс юзера первый, а компа последний,
+# то юзер проиграл. Если индекс юзера n не первый и не последний, а индекс компа не лежит в диапазоне от n до n-7,
+# то юзер выиграл
+
 user_name = input('Enter your name: ')
 print('Hello, {}'.format(user_name))
+user_options = input('Enter your options or leave the line empty for default options: ')
+print("Okay, let's start")
+if user_options == '':
+    options = options_default
+else:
+    options = options_extended
 name_score = {}
 f = open('1.txt')
 for line in f:
