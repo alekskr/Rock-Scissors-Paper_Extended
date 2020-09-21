@@ -68,7 +68,6 @@ def extended():
                     break
 
 
-
 options_default = ('rock', 'scissors', 'paper')
 options_extended = ('rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge', 'paper', 'air', 'water',
                     'dragon', 'devil', 'lightning', 'gun')
