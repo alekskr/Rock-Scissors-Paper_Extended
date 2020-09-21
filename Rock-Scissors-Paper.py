@@ -3,10 +3,6 @@
 import random
 import sys
 
-print("\nTo play a move, enter 'rock', 'paper', or 'scissors' (without quotes).\n"
-      "To view your score, enter !rating.\n"
-      "To quit the game, enter !exit.\n\n")
-
 
 def rating(all_points):
     """your rating"""
@@ -20,7 +16,7 @@ def default():
     """game with default options"""
     points = 0
     while True:
-        option = random.choice(options)
+        ai = random.choice(options)
         user_choice = input()
         if user_choice not in options and user_choice not in ('!exit', '!rating'):
             print('Invalid input')
@@ -30,16 +26,16 @@ def default():
             print('Bye!')
             f.close()
             sys.exit()
-        elif user_choice == option:
+        elif user_choice == ai:
             points = points + 50
-            print('There is a draw ({})'.format(option))
-        elif user_choice == options[0] and option == options[2] or \
-                user_choice == options[1] and option == options[0] or \
-                user_choice == options[2] and option == options[1]:
-            print('Sorry, but the computer chose {}'.format(option))
+            print('There is a draw ({})'.format(ai))
+        elif user_choice == options[0] and ai == options[2] or \
+                user_choice == options[1] and ai == options[0] or \
+                user_choice == options[2] and ai == options[1]:
+            print('Sorry, but the computer chose {}'.format(ai))
         else:
             points = points + 100
-            print('Well done. The computer chose {} and failed'.format(option))
+            print('Well done. The computer chose {} and failed'.format(ai))
 
 
 def extended():
@@ -61,19 +57,16 @@ def extended():
             print('There is a draw ({})'.format(ai))
         else:
             for index, item in enumerate(options):
-                # if user_choice == options[-1] and option == options[0]:
-                #     points = points + 100
-                #     print('Well done. The computer chose {} and failed'.format(option))
-                #     break
-                # elif user_options != '' and user_choice not in (options[0], options[-1]) and \
-                #         option not in range(index, index - 8):
-                if len(user_options) != 1 and ai not in range(index, index - 8):
-                    points = points + 100
-                    print('Well done. The computer chose {} and failed'.format(ai))
+                for jindex, jitem in enumerate(options):
+                    if ai[index] == item[index] and user_choice[jindex] in jitem[jindex] and jindex >= index:
+                        points = points + 100
+                        print('Well done. The computer chose {} and failed'.format(ai))
+                        break
                     break
                 else:
                     print('Sorry, but the computer chose {}'.format(ai))
                     break
+
 
 
 options_default = ('rock', 'scissors', 'paper')
@@ -82,7 +75,19 @@ options_extended = ('rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf'
 
 user_name = input('Enter your name: ')
 print('Hello, {}'.format(user_name))
-user_options = input('Enter your options or leave the line empty for default options: ').split(',')
+user_options = 'rock,gun,lightning,devil,dragon,water,air,sponge,wolf,tree,human,snake,scissors,fire'.split(',')
+# user_options = input('Enter your options or leave the line empty for default options: ').split(',')
+print(user_options)
+print("To play a move, enter item from yous list:\n"
+      "-{}\n"
+      "To view your score, enter !rating.\n"
+      "To quit the game, enter !exit.\n\n".format('\n-'.join(user_options)))
+game_options = []
+# user options are set in accordance with the list of advanced options
+for i in options_extended:
+    if i in user_options:
+        game_options.append(i)
+print(game_options)
 print("Okay, let's start")
 name_score = {}
 f = open('1.txt')
@@ -93,7 +98,7 @@ if user_options == ['']:
     options = options_default
     default()
 else:
-    options = options_extended
+    options = game_options
     extended()
 
 # если индекс юзера последний, а индекс компа первый, то юзер победил. Если индекс юзера первый, а компа последний,
