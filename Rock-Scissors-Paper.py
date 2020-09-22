@@ -56,21 +56,31 @@ def extended():
             points = points + 50
             print('There is a draw ({})'.format(ai))
         else:
-            for index, item in enumerate(options):
-                for jindex, jitem in enumerate(options):
-                    if ai[index] == item[index] and user_choice[jindex] in jitem[jindex] and jindex >= index:
-                        points = points + 100
-                        print('Well done. The computer chose {} and failed'.format(ai))
-                        break
-                    break
-                else:
-                    print('Sorry, but the computer chose {}'.format(ai))
-                    break
+            if ai in win[user_choice]:
+                print('Well done. The computer chose {} and failed'.format(ai))
+            else:
+                print('Sorry, but the computer chose {}'.format(ai))
 
 
 options_default = ('rock', 'scissors', 'paper')
 options_extended = ('rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge', 'paper', 'air', 'water',
                     'dragon', 'devil', 'lightning', 'gun')
+
+win = {'rock': ['fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge'],
+       'fire': ['scissors', 'snake', 'human', 'tree', 'wolf', 'sponge', 'paper'],
+       'scissors': ['snake', 'human', 'tree', 'wolf', 'sponge', 'paper', 'air'],
+       'snake': ['human', 'tree', 'wolf', 'sponge', 'paper', 'air', 'water'],
+       'human': ['tree', 'wolf', 'sponge', 'paper', 'air', 'water', 'dragon'],
+       'tree': ['wolf', 'sponge', 'paper', 'air', 'water', 'dragon', 'devil'],
+       'wolf': ['sponge', 'paper', 'air', 'water', 'dragon', 'devil', 'lightning'],
+       'sponge': ['paper', 'air', 'water', 'dragon', 'devil', 'lightning', 'gun'],
+       'paper': ['air', 'water', 'dragon', 'devil', 'lightning', 'gun', 'rock'],
+       'air': ['water', 'dragon', 'devil', 'lightning', 'gun', 'rock', 'fire'],
+       'water': ['dragon', 'devil', 'lightning', 'gun', 'rock', 'fire', 'scissors'],
+       'dragon': ['devil', 'lightning', 'gun', 'rock', 'fire', 'scissors', 'snake'],
+       'devil': ['lightning', 'gun', 'rock', 'fire', 'scissors', 'snake', 'human'],
+       'lightning': ['gun', 'rock', 'fire', 'scissors', 'snake', 'human', 'tree'],
+       'gun': ['rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf']}
 
 user_name = input('Enter your name: ')
 print('Hello, {}'.format(user_name))
@@ -89,7 +99,7 @@ for i in options_extended:
 print(game_options)
 print("Okay, let's start")
 name_score = {}
-f = open('1.txt')
+f = open('rating.txt')
 for line in f:
     table = line.split()
     name_score[table[0]] = int(table[1])
