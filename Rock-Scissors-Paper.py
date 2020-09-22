@@ -16,7 +16,6 @@ def game():
     """game with extended options"""
     points = 0
     name_score.setdefault(user_name, points)
-    print(name_score)
     while True:
         ai = random.choice(options)
         user_choice = input()
@@ -77,10 +76,12 @@ name_score = {}
 f = open('rating.txt', encoding='utf-8')
 f.seek(0)
 for line in f:
-    table = line.split()
-    name_score[table[0]] = int(table[1])
+    if line == '':
+        break
+    else:
+        table = line.split()
+        name_score[table[0]] = int(table[1])
 f.close()
-print(name_score)
 if user_options == ['']:
     options = options_default
 else:
