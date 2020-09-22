@@ -12,35 +12,11 @@ def rating(all_points):
         return all_points
 
 
-def default():
-    """game with default options"""
-    points = 0
-    while True:
-        ai = random.choice(options)
-        user_choice = input()
-        if user_choice not in options and user_choice not in ('!exit', '!rating'):
-            print('Invalid input')
-        elif user_choice == '!rating':
-            print('Your rating:', rating(points))
-        elif user_choice == '!exit':
-            print('Bye!')
-            f.close()
-            sys.exit()
-        elif user_choice == ai:
-            points = points + 50
-            print('There is a draw ({})'.format(ai))
-        elif user_choice == options[0] and ai == options[2] or \
-                user_choice == options[1] and ai == options[0] or \
-                user_choice == options[2] and ai == options[1]:
-            print('Sorry, but the computer chose {}'.format(ai))
-        else:
-            points = points + 100
-            print('Well done. The computer chose {} and failed'.format(ai))
-
-
-def extended():
+def game():
     """game with extended options"""
     points = 0
+    name_score.setdefault(user_name, points)
+    print(name_score)
     while True:
         ai = random.choice(options)
         user_choice = input()
@@ -50,13 +26,18 @@ def extended():
             print('Your rating:', rating(points))
         elif user_choice == '!exit':
             print('Bye!')
-            f.close()
+            name_score[user_name] = points + name_score[user_name]
+            file = open('rating.txt', 'w', encoding='utf-8')
+            for k, v in name_score.items():
+                file.write('{} {}\n'.format(k, v))
+            file.close()
             sys.exit()
         elif user_choice == ai:
             points = points + 50
             print('There is a draw ({})'.format(ai))
         else:
             if ai in win[user_choice]:
+                points = points + 100
                 print('Well done. The computer chose {} and failed'.format(ai))
             else:
                 print('Sorry, but the computer chose {}'.format(ai))
@@ -65,7 +46,6 @@ def extended():
 options_default = ('rock', 'scissors', 'paper')
 options_extended = ('rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge', 'paper', 'air', 'water',
                     'dragon', 'devil', 'lightning', 'gun')
-
 win = {'rock': ['fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge'],
        'fire': ['scissors', 'snake', 'human', 'tree', 'wolf', 'sponge', 'paper'],
        'scissors': ['snake', 'human', 'tree', 'wolf', 'sponge', 'paper', 'air'],
@@ -82,34 +62,27 @@ win = {'rock': ['fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge'],
        'lightning': ['gun', 'rock', 'fire', 'scissors', 'snake', 'human', 'tree'],
        'gun': ['rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf']}
 
-user_name = input('Enter your name: ')
-print('Hello, {}'.format(user_name))
-user_options = 'rock,gun,lightning,devil,dragon,water,air,sponge,wolf,tree,human,snake,scissors,fire'.split(',')
-# user_options = input('Enter your options or leave the line empty for default options: ').split(',')
-print(user_options)
-print("To play a move, enter item from yous list:\n"
+user_name = input('Enter your name: ').capitalize()
+print('Hello, {}!'.format(user_name))
+print('Extended options:', ', '.join(options_extended), '\n')
+user_options = input("Enter your options from 'Extended options' separated by a space or "
+                     "leave the line empty for default options: ").split(' ')
+print("To play a move, enter item from yours list:\n"
       "-{}\n"
       "To view your score, enter !rating.\n"
       "To quit the game, enter !exit.\n\n".format('\n-'.join(user_options)))
-game_options = []
-# user options are set in accordance with the list of advanced options
-for i in options_extended:
-    if i in user_options:
-        game_options.append(i)
-print(game_options)
+
 print("Okay, let's start")
 name_score = {}
-f = open('rating.txt')
+f = open('rating.txt', encoding='utf-8')
+f.seek(0)
 for line in f:
     table = line.split()
     name_score[table[0]] = int(table[1])
+f.close()
+print(name_score)
 if user_options == ['']:
     options = options_default
-    default()
 else:
-    options = game_options
-    extended()
-
-# если индекс юзера последний, а индекс компа первый, то юзер победил. Если индекс юзера первый, а компа последний,
-# то юзер проиграл. Если индекс юзера n не первый и не последний, а индекс компа не лежит в диапазоне от n до n-7,
-# то юзер выиграл
+    options = user_options
+game()

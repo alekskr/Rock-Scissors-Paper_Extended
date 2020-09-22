@@ -80,6 +80,8 @@ def default():
 def game():
     """game with extended options"""
     points = 0
+    name_score.setdefault(user_name, points)
+    print(name_score)
     while True:
         ai = random.choice(options)
         user_choice = input()
@@ -89,15 +91,16 @@ def game():
             print('Your rating:', rating(points))
         elif user_choice == '!exit':
             print('Bye!')
-            if user_name in name_score:
-                name_score[user_name] = name_score[user_name] + points
-            else:
-                name_score[user_name] = points
-            f.seek(0)
-            for k, v in name_score.items():
-                f.write('{} {}\n'.format(k, v))
+            # if name_score[user_name] in name_score:
+            #     name_score[user_name] = points + int(name_score[user_name])
+            # else:
 
-            f.close()
+            name_score[user_name] = points + name_score[user_name]
+            file = open('rating.txt', 'w', encoding='utf-8')
+            for k, v in name_score.items():
+                file.write('{} {}\n'.format(k, v))
+            file.close()
+
             sys.exit()
         elif user_choice == ai:
             points = points + 50
@@ -142,11 +145,12 @@ print("To play a move, enter item from yours list:\n"
 
 print("Okay, let's start")
 name_score = {}
-f = open('rating.txt', 'a+', encoding='utf-8')
+f = open('rating.txt', encoding='utf-8')
 f.seek(0)
 for line in f:
     table = line.split()
     name_score[table[0]] = int(table[1])
+f.close()
 print(name_score)
 if user_options == ['']:
     options = options_default
