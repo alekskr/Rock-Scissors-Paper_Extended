@@ -76,7 +76,7 @@ name_score = {}
 f = open('rating.txt', encoding='utf-8')
 f.seek(0)
 for line in f:
-    if line == '':
+    if line == '\n':
         break
     else:
         table = line.split()
