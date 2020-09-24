@@ -18,7 +18,7 @@ def game():
     name_score.setdefault(user_name, points)
     while True:
         ai = random.choice(options)
-        user_choice = input()
+        user_choice = input('Your move: ')
         if user_choice not in options and user_choice not in ('!exit', '!rating'):
             print('Invalid input')
         elif user_choice == '!rating':
@@ -61,17 +61,23 @@ win = {'rock': ['fire', 'scissors', 'snake', 'human', 'tree', 'wolf', 'sponge'],
        'lightning': ['gun', 'rock', 'fire', 'scissors', 'snake', 'human', 'tree'],
        'gun': ['rock', 'fire', 'scissors', 'snake', 'human', 'tree', 'wolf']}
 
-user_name = input('Enter your name: ').capitalize()
-print('Hello, {}!'.format(user_name))
+while True:
+    user_name = input('Enter your name: ').capitalize()
+    if user_name == '':
+        print('Please enter your name: ')
+        continue
+    else:
+        print('Hello, {}!'.format(user_name))
+        break
+print('Default options:', ', '.join(options_default))
 print('Extended options:', ', '.join(options_extended), '\n')
-user_options = input("Enter your options from 'Extended options' separated by a space or "
-                     "leave the line empty for default options: ").split(' ')
+user_options = input("Enter your options from 'Extended options' separated by a space or just press ENTER "
+                     "for default options: ").replace(',', '').replace(', ', '').replace(' ,', '').split(' ')
 print("To play a move, enter item from yours list:\n"
       "-{}\n"
       "To view your score, enter !rating.\n"
-      "To quit the game, enter !exit.\n\n".format('\n-'.join(user_options)))
-
-print("Okay, let's start")
+      "To quit the game, enter !exit.\n\n"
+      "Okay, let's start!".format('\n-'.join(user_options)))
 name_score = {}
 f = open('rating.txt', encoding='utf-8')
 f.seek(0)
