@@ -71,15 +71,22 @@ while True:
         break
 print('Default options:', ', '.join(options_default))
 print('Extended options:', ', '.join(options_extended), '\n')
-user_options = input("Enter your options from 'Extended options' separated by a space or just press ENTER "
-                     "for default options: ").replace(',', '').replace(', ', '').replace(' ,', '').split(' ')
+user_options = input("Type '!all' to select all options or "
+                     "type your options from 'Extended options' separated by a space or "
+                     "just press ENTER for default options: ").replace(',', '').replace(', ', '').replace(' ,', '')
+if user_options == '':
+    options = options_default
+elif user_options == '!all':
+    options = options_extended
+else:
+    options = user_options.split()
 print("To play a move, enter item from yours list:\n"
       "-{}\n"
-      "To view your score, enter !rating.\n"
-      "To quit the game, enter !exit.\n\n"
-      "Okay, let's start!".format('\n-'.join(user_options)))
+      "To view your score, enter '!rating'.\n"
+      "To quit the game, enter '!exit'.\n\n"
+      "Okay, let's start!".format('\n-'.join(options)))
 name_score = {}
-f = open('rating.txt', encoding='utf-8')
+f = open('rating.txt', 'a+', encoding='utf-8')
 f.seek(0)
 for line in f:
     if line == '\n':
@@ -88,8 +95,4 @@ for line in f:
         table = line.split()
         name_score[table[0]] = int(table[1])
 f.close()
-if user_options == ['']:
-    options = options_default
-else:
-    options = user_options
 game()
